@@ -1,7 +1,7 @@
+import os
 import streamlit as st
 
 from databricks.ai_search.client import AISearchClient
-
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import (
     ChatMessage,
@@ -19,17 +19,34 @@ INDEX_NAME = "databricks_poc_ws.hr_chatbot.hr_policy_index"
 MODEL_NAME = "databricks-meta-llama-3-1-8b-instruct"
 
 # ----------------------------
-# databricks Clients
+# Databricks Clients
 # ----------------------------
 
-search_client = AISearchClient()
+host = os.environ.get("DATABRICKS_HOST")
+client_id = os.environ.get("DATABRICKS_CLIENT_ID")
+client_secret = os.environ.get("DATABRICKS_CLIENT_SECRET")
+
+# TEMPORARY DEBUGGING
+st.write("HOST:", host)
+st.write("CLIENT_ID EXISTS:", client_id is not None)
+st.write("CLIENT_SECRET EXISTS:", client_secret is not None)
+
+search_client = AISearchClient(
+    workspace_url=host,
+    client_id=client_id,
+    client_secret=client_secret
+)
 
 index = search_client.get_index(
     endpoint_name=ENDPOINT_NAME,
     index_name=INDEX_NAME
 )
 
-w = WorkspaceClient()
+w = WorkspaceClient(
+    host=host,
+    client_id=client_id,
+    client_secret=client_secret
+)
 
 # ----------------------------
 # Retreival 
