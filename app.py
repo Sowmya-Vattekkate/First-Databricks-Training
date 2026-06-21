@@ -26,15 +26,14 @@ host = os.environ.get("DATABRICKS_HOST")
 client_id = os.environ.get("DATABRICKS_CLIENT_ID")
 client_secret = os.environ.get("DATABRICKS_CLIENT_SECRET")
 
-# TEMPORARY DEBUGGING
 st.write("HOST:", host)
 st.write("CLIENT_ID EXISTS:", client_id is not None)
 st.write("CLIENT_SECRET EXISTS:", client_secret is not None)
 
 search_client = AISearchClient(
-    workspace_url=host,
-    client_id=client_id,
-    client_secret=client_secret
+    workspace_url=f"https://{host}",
+    service_principal_client_id=client_id,
+    service_principal_client_secret=client_secret
 )
 
 index = search_client.get_index(
@@ -42,11 +41,7 @@ index = search_client.get_index(
     index_name=INDEX_NAME
 )
 
-w = WorkspaceClient(
-    host=host,
-    client_id=client_id,
-    client_secret=client_secret
-)
+w = WorkspaceClient()
 
 # ----------------------------
 # Retreival 
