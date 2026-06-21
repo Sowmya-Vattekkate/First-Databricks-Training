@@ -83,18 +83,13 @@ def extract_sources(results):
 
     rows = results["result"]["data_array"]
 
-    pages = set()
+    sources = set()
 
     for row in rows:
 
-        source = row[2]
+        sources.add(row[2])
 
-        match = re.search(r'Page\s+(\d+)', source)
-
-        if match:
-            pages.add(int(match.group(1)))
-
-    return sorted(pages)
+    return sorted(sources)
 
 # ------------------------------------
 # Define Prompt
